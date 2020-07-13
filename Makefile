@@ -4,17 +4,18 @@ OFILES := server.o
 CFLAGS := -F.
 LDFLAGS := -framework Racket -Wl,-rpath,.
 
-ZMQMOD := env/addon/7.7/pkgs/zeromq
+ZMQMOD := ./env/addon/7.7/pkgs/zeromq
+ADDONDIR := ./env/addon
 
 .PHONY: all
 all: server
 
 .PHONY: clean
 clean:
-	rm -f $(OFILES) server data.c
+	rm -rf $(OFILES) server data.c env
 
 $(ZMQMOD):
-	PLTADDONDIR="$@" raco pkg install zeromq
+	PLTADDONDIR="$(ADDONDIR)" raco pkg install zeromq
 
 server: $(OFILES)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o server $(OFILES)
